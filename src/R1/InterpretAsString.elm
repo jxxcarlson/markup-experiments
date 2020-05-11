@@ -1,7 +1,7 @@
-module InterpretAsString exposing (check, evalExpr, evalExprList, evalResult)
+module R1.InterpretAsString exposing (check, evalExpr, evalExprList, evalResult)
 
-import Parse exposing (Expr(..), parse)
 import Parser exposing (DeadEnd)
+import R1.Parse exposing (Expr(..), parse)
 
 
 {-| A round-trip test of the

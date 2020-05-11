@@ -1,4 +1,4 @@
-module Parse exposing (Expr(..), parse)
+module R2.Parse exposing (Expr(..), functionExpression, parse)
 
 import Parser exposing (..)
 
@@ -7,6 +7,7 @@ type Expr
     = Word String
     | ExprList (List Expr)
     | Function String
+    | FunctionExpression Expr
     | FunctionApplication Expr Expr
 
 
@@ -44,6 +45,28 @@ closeTermC =
 
 closeTermS =
     String.fromChar closeTermC
+
+
+{-|
+
+    > run functionExpression "foo.bar.baz"
+    Ok ["foo","bar","baz"]
+
+-}
+functionExpression =
+    succeed (\head tail -> head :: tail)
+        |= word_
+        |= functionExpressionElements
+
+
+functionExpressionElements =
+    manyp (oneOf [ functionExpressionElement, succeed () |> map (\_ -> "") ])
+
+
+functionExpressionElement =
+    succeed identity
+        |. symbol "."
+        |= word_
 
 
 
@@ -127,8 +150,8 @@ word_ : Parser String
 word_ =
     getChompedString <|
         succeed ()
-            |. chompIf (\c -> c /= ' ' && c /= openTermC && c /= closeTermC)
-            |. chompWhile (\c -> c /= ' ' && c /= closeTermC)
+            |. chompIf (\c -> c /= ' ' && c /= openTermC && c /= closeTermC && c /= '.')
+            |. chompWhile (\c -> c /= ' ' && c /= closeTermC && c /= '.')
             |. chompWhile (\c -> c == ' ')
 
 

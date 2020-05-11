@@ -1,4 +1,4 @@
-module InterpretAsHtml exposing (..)
+module R1.InterpretAsHtml exposing (..)
 
 import Parse exposing (Expr(..), parse)
 import Parser exposing (DeadEnd)
