@@ -105,4 +105,5 @@ This is more compact than
 > "This is a [b [i real]] test"
 
 The idea is that the function
- `b.i` is the compositions of functions `b` and `i`.
+ `b.i` is the composition of the functions  with names
+ `b` and `i`.
