@@ -10,6 +10,22 @@ type Expr
     | FunctionApplication Expr Expr
 
 
+openTermC =
+    '['
+
+
+openTermS =
+    String.fromChar openTermC
+
+
+closeTermC =
+    ']'
+
+
+closeTermS =
+    String.fromChar closeTermC
+
+
 
 -- EXPR
 
@@ -21,9 +37,13 @@ expr =
 
 {-|
 
-    > run exprList "x y <f a b c>"
-    Ok [ExprList [Word "x",Word "y"]
-      ,FunctionApplication (Function "f") (ExprList [Word "a",Word "b",Word "c"])]
+    > run exprList "a b [f x] c d [f y]"
+    Ok [
+        ExprList [Word ("a "),Word ("b ")]
+        ,FunctionApplication (Function ("f ")) (ExprList [Word "x"])
+        ,ExprList [Word ("c "),Word ("d ")]
+        ,FunctionApplication (Function ("f ")) (ExprList [Word "y"])
+       ]
 
 -}
 exprList =
@@ -55,44 +75,23 @@ ifProgress parser ( offset, vs ) =
 functionApplication : Parser Expr
 functionApplication =
     succeed FunctionApplication
-        |. symbol "<"
+        |. symbol openTermS
         |= (word_ |> map Function)
-        |. oneSpace
-        |= words2
-        |. symbol ">"
-
-
-foo =
-    symbol "<" |> andThen (\_ -> word_)
-
-
-bar =
-    symbol "<" |> andThen (\_ -> word_) |> andThen (\_ -> symbol ">")
+        |= lazy (\_ -> exprList |> map ExprList)
+        |. symbol closeTermS
+        |. oneOf [ symbol " ", succeed () ]
 
 
 function : Parser Expr
 function =
     succeed Function
-        |. symbol "<"
+        |. symbol openTermS
         |= word_
         |. symbol " "
 
 
 
 -- WORD
-
-
-word : Parser Expr
-word =
-    word_ |> map Word
-
-
-word_ : Parser String
-word_ =
-    getChompedString <|
-        succeed ()
-            |. chompIf (\c -> c /= ' ' && c /= '<' && c /= '>')
-            |. chompWhile (\c -> c /= ' ' && c /= '>')
 
 
 {-|
@@ -109,41 +108,28 @@ words =
     many word |> map ExprList
 
 
-words2 : Parser Expr
-words2 =
-    many2 word |> map ExprList
+word : Parser Expr
+word =
+    word_ |> map Word
+
+
+word_ : Parser String
+word_ =
+    getChompedString <|
+        succeed ()
+            |. chompIf (\c -> c /= ' ' && c /= openTermC && c /= closeTermC)
+            |. chompWhile (\c -> c /= ' ' && c /= closeTermC)
+            |. chompWhile (\c -> c == ' ')
 
 
 
 -- HELPERS
 
 
-spaces : Parser ()
-spaces =
-    succeed ()
-        |. chompIf (\c -> c == ' ')
-        |. chompWhile (\c -> c /= ' ')
-
-
 oneSpace : Parser ()
 oneSpace =
     succeed ()
         |. chompIf (\c -> c == ' ')
-
-
-between : Parser opening -> Parser closing -> Parser a -> Parser a
-between opening closing p =
-    succeed identity
-        |. opening
-        |. spaces
-        |= p
-        |. spaces
-        |. closing
-
-
-pbrackets : Parser a -> Parser a
-pbrackets =
-    between (symbol "<") (symbol ">")
 
 
 many : Parser a -> Parser (List a)
@@ -158,28 +144,23 @@ step p vs =
             succeed (\v -> Loop (v :: vs))
                 |= p
                 |. oneSpace
-        , succeed ()
-            |> map (\_ -> Done (List.reverse vs))
-        ]
-
-
-many2 : Parser a -> Parser (List a)
-many2 p =
-    loop [] (step2 p)
-
-
-step2 : Parser a -> List a -> Parser (Step (List a) (List a))
-step2 p vs =
-    oneOf
-        [ backtrackable <|
-            succeed (\v -> Loop (v :: vs))
-                |= p
-                |. oneSpace
         , succeed (\v -> Loop (v :: vs))
             |= p
         , succeed ()
             |> map (\_ -> Done (List.reverse vs))
         ]
+
+
+
+-- STUFF
+
+
+foo =
+    symbol "<" |> andThen (\_ -> word_)
+
+
+bar =
+    symbol "<" |> andThen (\_ -> word_) |> andThen (\_ -> symbol ">")
 
 
 
