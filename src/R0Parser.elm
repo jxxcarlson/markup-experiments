@@ -1,4 +1,4 @@
-module R1Parser exposing (..)
+module R0Parser exposing (..)
 
 import Parser exposing (..)
 
@@ -16,28 +16,12 @@ type Expr
 
 expr : Parser Expr
 expr =
-    oneOf [ functionApplication, words ]
+    oneOf [ functionApplication, words2 ]
 
 
+exprList : Parser Expr
 exprList =
-    loop ( 0, [] ) <|
-        ifProgress <|
-            expr
-
-
-ifProgress : Parser a -> ( Int, List a ) -> Parser (Step ( Int, List a ) (List a))
-ifProgress parser ( offset, vs ) =
-    succeed (\v n -> ( n, v ))
-        |= parser
-        |= getOffset
-        |> map
-            (\( newOffset, v ) ->
-                if offset == newOffset then
-                    Done (List.reverse vs)
-
-                else
-                    Loop ( newOffset, v :: vs )
-            )
+    many3 expr |> map ExprList
 
 
 functionApplication : Parser Expr
@@ -48,14 +32,6 @@ functionApplication =
         |. oneSpace
         |= words2
         |. symbol ">"
-
-
-foo =
-    symbol "<" |> andThen (\_ -> word_)
-
-
-bar =
-    symbol "<" |> andThen (\_ -> word_) |> andThen (\_ -> symbol ">")
 
 
 function : Parser Expr
@@ -164,6 +140,21 @@ step2 p vs =
                 |= p
                 |. oneSpace
         , succeed (\v -> Loop (v :: vs))
+            |= p
+        , succeed ()
+            |> map (\_ -> Done (List.reverse vs))
+        ]
+
+
+many3 : Parser a -> Parser (List a)
+many3 p =
+    loop [] (step3 p)
+
+
+step3 : Parser a -> List a -> Parser (Step (List a) (List a))
+step3 p vs =
+    oneOf
+        [ succeed (\v -> Loop (v :: vs))
             |= p
         , succeed ()
             |> map (\_ -> Done (List.reverse vs))
