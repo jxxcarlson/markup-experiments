@@ -11,6 +11,12 @@ type Func
     = FAttr AttributeList
 
 
+{-|
+
+    > parse "[red.i.b test]" |> evalResult
+    "<div><span style=font-weight:bold;font-style:italic;color:red;foo:bar >test</span></div>
+
+-}
 apply : Func -> String -> String
 apply func str =
     case func of
@@ -52,7 +58,7 @@ id =
 
 red : Func
 red =
-    FAttr [ ( "font-color", "red" ) ]
+    FAttr [ ( "color", "red" ) ]
 
 
 italic : Func

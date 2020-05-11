@@ -4,7 +4,7 @@ import Dict
 import Maybe.Extra
 import Parser exposing (DeadEnd)
 import R2.Func as Func
-import R2.Parse exposing (Expr(..), parse)
+import R2.Parse exposing (Expr(..), FuncName(..), parse)
 
 
 {-| The functions `i` and `b` stand for itqlic and bold:
@@ -49,11 +49,11 @@ evalExpr expr =
         ExprList list ->
             List.map evalExpr list |> String.join " "
 
-        FunctionApplication (ExprList fns) args ->
+        FunctionApplication fns args ->
             let
                 func =
-                    List.map evalExpr fns
-                        |> List.map (\f_ -> Dict.get f_ Func.dict)
+                    fns
+                        |> List.map (\(F f_) -> Dict.get f_ Func.dict)
                         |> Maybe.Extra.values
                         |> Func.composeList
             in
