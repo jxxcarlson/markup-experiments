@@ -52,5 +52,22 @@ For now, just evaluate to a string:
     "a b [f [g y]]"
 ```
 
-Note that `evalResult` is a left inverse of `parse`.  At 
-least it is supposed to be. 
+Note that `evalResult` is a left inverse of `parse`.  A parser 
+with a left inverse is said to be *injective*. For injective
+parser, the source text is recoverable fromm the AST.  
+As a convenience for testing such parsers,
+we have the following code:
+
+```elm
+{-| A round-trip test of the
+validity of the parser.
+-}
+check : String -> Status
+check str =
+    case evalResult (parse str) == str of
+        True ->
+            Pass
+
+        False ->
+            Fail
+```

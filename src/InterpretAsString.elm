@@ -1,7 +1,25 @@
-module InterpretAsString exposing (evalExpr, evalExprList, evalResult)
+module InterpretAsString exposing (check, evalExpr, evalExprList, evalResult)
 
-import Parse exposing (Expr(..))
+import Parse exposing (Expr(..), parse)
 import Parser exposing (DeadEnd)
+
+
+{-| A round-trip test of the
+validity of the parser.
+-}
+check : String -> Status
+check str =
+    case evalResult (parse str) == str of
+        True ->
+            Pass
+
+        False ->
+            Fail
+
+
+type Status
+    = Pass
+    | Fail
 
 
 {-|
