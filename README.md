@@ -76,10 +76,25 @@ At the moment, our parser is "injective" up to white space.
 
 (Ha ha! proof needed for this assertion)
 
-## Coming soon
+## Eval as Html
 
-A function
+Using module `InterpretAsHtml`, we have
 
 ```
-evalHtml : Expr -> Html
+      > parse "This is a [b [i real]] test" |> H.evalResult
+      "<div>This  is  a
+      <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
+      test</div>"
 ```
+
+## Plans
+
+We want to make it possible to write text like
+
+> "This is a [b [i real]] test"
+ 
+instead of 
+
+> "This is a [b.i real] test"
+
+where `b.i` is the compositions of functions `b` and `i`.
