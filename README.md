@@ -71,3 +71,11 @@ check str =
         False ->
             Fail
 ```
+
+## Coming soon
+
+A function
+
+```
+evalHtml : Expr -> Html
+```
