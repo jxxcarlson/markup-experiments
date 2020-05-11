@@ -52,10 +52,10 @@ For now, just evaluate to a string:
     "a b [f [g y]]"
 ```
 
-Note that `evalResult` is a left inverse of `parse`.  A parser 
-with a left inverse is said to be *injective*. For injective
-parser, the source text is recoverable fromm the AST.  
-As a convenience for testing such parsers,
+We would like for `evalResult` to be a left inverse of `parse`.  
+A parser with a left inverse is said to be *injective*. 
+For injective parser, the source text is recoverable 
+fromm the AST.  As a convenience for testing such parsers,
 we have the following code:
 
 ```elm
@@ -71,6 +71,10 @@ check str =
         False ->
             Fail
 ```
+
+At the moment, our parser is "injective" up to white space.
+
+(Ha ha! proof needed for this assertion)
 
 ## Coming soon
 
