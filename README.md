@@ -1,18 +1,23 @@
-# Language R1
+# Rational Markup Languages
 
-This is a first in a series of experiments in 
+We collect here  a series of experiments in 
 designing a rational markup language.
 
-Here is an example:
+
+## Language R1
+
+
+Here is an example of a piece of text in the langauge
+R1:
 
 ```
-This is a test: [strong [italic whatever!]]
+This is a test: [bold [italic whatever!]]
 ```
 
 or perhaps just 
 
 ```
-This is a test: [s [i whatever!]]
+This is a test: [b [i whatever!]]
 ```
 
 There is only one construct:
@@ -21,7 +26,7 @@ There is only one construct:
 [FUNCTION_NAME ARGLIST]
 ```
 
-## AST
+### AST
 
 ```elm
 type Expr
@@ -31,7 +36,7 @@ type Expr
     | FunctionApplication Expr Expr
 ```
 
-## Parse 
+### Parse 
 
 ```elm
     parse "a b [f [g y]]"
@@ -43,7 +48,7 @@ type Expr
        ]
 ```
 
-## Eval
+### Eval
 
 For now, just evaluate to a string:
 
@@ -76,7 +81,7 @@ At the moment, our parser is "injective" up to white space.
 
 (Ha ha! proof needed for this assertion)
 
-## Eval as Html
+### Eval as Html
 
 Using module `InterpretAsHtml`, we have
 
@@ -87,14 +92,17 @@ Using module `InterpretAsHtml`, we have
       test</div>"
 ```
 
-## Plans
+## Language R2
 
-We want to make it possible to write text like
-
-> "This is a [b [i real]] test"
- 
-instead of 
+The R2 makes it possible to write text like
 
 > "This is a [b.i real] test"
 
-where `b.i` is the compositions of functions `b` and `i`.
+ 
+where `b` means `bold` and `i` means `italic`.
+This is more compact than
+
+> "This is a [b [i real]] test"
+
+The idea is that the function
+ `b.i` is the compositions of functions `b` and `i`.

@@ -1,4 +1,4 @@
-module R2.Parse exposing (Expr(..), functionExpression, parse)
+module R2.Parse exposing (Expr(..), functionApplication, functionExpression, parse)
 
 import Parser exposing (..)
 
@@ -7,18 +7,14 @@ type Expr
     = Word String
     | ExprList (List Expr)
     | Function String
-    | FunctionExpression Expr
     | FunctionApplication Expr Expr
 
 
 {-|
 
-    > parse "a b [f [g y]]"
-    Ok [
-        ExprList [Word ("a "),Word ("b ")]
-        ,FunctionApplication (Function ("f ")) (ExprList [Word "x"])
-        ,ExprList [Word ("c "),Word ("d ")]
-        ,FunctionApplication (Function ("f ")) (ExprList [Word "y"])
+    > parse "[foo.bar x y]"
+    Ok [ FunctionApplication (ExprList [Function "foo",Function "bar"])
+        (ExprList [ExprList [Word ("x "),Word "y"]])
        ]
 
 -}
@@ -54,9 +50,16 @@ closeTermS =
 
 -}
 functionExpression =
-    succeed (\head tail -> head :: tail)
+    (succeed (\head tail -> head :: tail)
+        |. symbol openTermS
         |= word_
         |= functionExpressionElements
+        |. spaces
+    )
+        |> map (List.filter (\x -> x /= ""))
+        |> map (List.map String.trim)
+        |> map (List.map Function)
+        |> map ExprList
 
 
 functionExpressionElements =
@@ -108,8 +111,7 @@ ifProgress parser ( offset, vs ) =
 functionApplication : Parser Expr
 functionApplication =
     succeed FunctionApplication
-        |. symbol openTermS
-        |= (word_ |> map Function)
+        |= functionExpression
         |= lazy (\_ -> exprList |> map ExprList)
         |. symbol closeTermS
         |. oneOf [ symbol " ", succeed () ]
