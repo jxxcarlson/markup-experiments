@@ -19,10 +19,22 @@ expr =
     oneOf [ functionApplication, words ]
 
 
+{-|
+
+    > run exprList "x y <f a b c>"
+    Ok [ExprList [Word "x",Word "y"]
+      ,FunctionApplication (Function "f") (ExprList [Word "a",Word "b",Word "c"])]
+
+-}
 exprList =
+    manyp expr
+
+
+manyp : Parser a -> Parser (List a)
+manyp parser =
     loop ( 0, [] ) <|
         ifProgress <|
-            expr
+            parser
 
 
 ifProgress : Parser a -> ( Int, List a ) -> Parser (Step ( Int, List a ) (List a))
