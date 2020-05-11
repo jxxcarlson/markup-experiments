@@ -1,0 +1,75 @@
+module R2.Func exposing (apply, bold, composeList, dict, italic, red)
+
+import Dict exposing (Dict)
+
+
+type alias AttributeList =
+    List ( String, String )
+
+
+type Func
+    = FAttr AttributeList
+
+
+apply : Func -> String -> String
+apply func str =
+    case func of
+        FAttr attributes ->
+            applyAttributes attributes str
+
+
+applyAttributes : AttributeList -> String -> String
+applyAttributes attrList str =
+    let
+        attr =
+            List.map (\( k, v ) -> k ++ ":" ++ v) attrList
+                |> String.join ";"
+    in
+    tagWithStyle attr "span" str
+
+
+compose : Func -> Func -> Func
+compose f g =
+    case ( f, g ) of
+        ( FAttr ff, FAttr gg ) ->
+            FAttr (ff ++ gg)
+
+
+composeList : List Func -> Func
+composeList funcs =
+    List.foldl (\f acc -> compose f acc) id funcs
+
+
+dict : Dict String Func
+dict =
+    Dict.fromList [ ( "id", id ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
+
+
+id : Func
+id =
+    FAttr [ ( "foo", "bar" ) ]
+
+
+red : Func
+red =
+    FAttr [ ( "font-color", "red" ) ]
+
+
+italic : Func
+italic =
+    FAttr [ ( "font-style", "italic" ) ]
+
+
+bold : Func
+bold =
+    FAttr [ ( "font-weight", "bold" ) ]
+
+
+
+--compose : List SpanFunction -> SpanFunction
+--compose fs =
+
+
+tagWithStyle : String -> String -> String -> String
+tagWithStyle style tag_ string =
+    "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"

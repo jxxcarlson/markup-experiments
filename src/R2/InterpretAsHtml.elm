@@ -1,7 +1,10 @@
-module R1.InterpretAsHtml exposing (..)
+module R2.InterpretAsHtml exposing (..)
 
+import Dict
+import Maybe.Extra
 import Parser exposing (DeadEnd)
-import R1.Parse exposing (Expr(..), parse)
+import R2.Func as Func
+import R2.Parse exposing (Expr(..), parse)
 
 
 {-| The functions `i` and `b` stand for itqlic and bold:
@@ -46,24 +49,15 @@ evalExpr expr =
         ExprList list ->
             List.map evalExpr list |> String.join " "
 
-        FunctionApplication f args ->
+        FunctionApplication (ExprList fns) args ->
             let
-                fName =
-                    evalExpr f
+                func =
+                    List.map evalExpr fns
+                        |> List.map (\f_ -> Dict.get f_ Func.dict)
+                        |> Maybe.Extra.values
+                        |> Func.composeList
             in
-            case String.trim fName of
-                "i" ->
-                    tagWithStyle "font-style:italic" "span" (evalExpr args)
+            Func.apply func (evalExpr args)
 
-                "b" ->
-                    tagWithStyle "font-weight:bold" "span" (evalExpr args)
-
-                _ ->
-                    tagWithStyle "font-color:red" "span" <|
-                        "(Unknown "
-                            ++ fName
-                            ++ ": "
-                            ++ evalExpr args
-
-        Function s ->
-            s
+        Function f ->
+            String.trim f
