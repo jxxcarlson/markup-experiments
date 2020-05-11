@@ -45,34 +45,6 @@ closeTermS =
     String.fromChar closeTermC
 
 
-{-|
-
-    > run functionExpression "foo.bar.baz"
-    Ok ["foo","bar","baz"]
-
--}
-functionExpression =
-    (succeed (\head tail -> head :: tail)
-        |. symbol openTermS
-        |= word_
-        |= functionExpressionElements
-        |. spaces
-    )
-        |> map (List.filter (\x -> x /= ""))
-        |> map (List.map String.trim)
-        |> map (List.map F)
-
-
-functionExpressionElements =
-    manyp (oneOf [ functionExpressionElement, succeed () |> map (\_ -> "") ])
-
-
-functionExpressionElement =
-    succeed identity
-        |. symbol "."
-        |= word_
-
-
 
 -- EXPR
 
@@ -107,6 +79,38 @@ ifProgress parser ( offset, vs ) =
                 else
                     Loop ( newOffset, v :: vs )
             )
+
+
+
+-- FUNCTION EXPRESSIONS, ETC.
+
+
+{-|
+
+    > run functionExpression "foo.bar.baz"
+    Ok ["foo","bar","baz"]
+
+-}
+functionExpression =
+    (succeed (\head tail -> head :: tail)
+        |. symbol openTermS
+        |= word_
+        |= functionExpressionElements
+        |. spaces
+    )
+        |> map (List.filter (\x -> x /= ""))
+        |> map (List.map String.trim)
+        |> map (List.map F)
+
+
+functionExpressionElements =
+    manyp (oneOf [ functionExpressionElement, succeed () |> map (\_ -> "") ])
+
+
+functionExpressionElement =
+    succeed identity
+        |. symbol "."
+        |= word_
 
 
 functionApplication : Parser Expr
@@ -185,27 +189,3 @@ step p vs =
         , succeed ()
             |> map (\_ -> Done (List.reverse vs))
         ]
-
-
-
--- STUFF
-
-
-foo =
-    symbol "<" |> andThen (\_ -> word_)
-
-
-bar =
-    symbol "<" |> andThen (\_ -> word_) |> andThen (\_ -> symbol ">")
-
-
-
-{-
-
-   > run (words |> andThen (\_ -> functionApplication)) "x y <f a b c>"
-   Ok (FunctionApplication (Function "f") (ExprList [Word "a",Word "b",Word "c"]))
-
-   > run (expr |> andThen (\_ -> expr)) "x y <f a b c>"
-   Ok (FunctionApplication (Function "f") (ExprList [Word "a",Word "b",Word "c"]))
-
--}

@@ -46,6 +46,10 @@ composeList funcs =
     List.foldl (\f acc -> compose f acc) id funcs
 
 
+
+-- FUNCTION DICT
+
+
 dict : Dict String Func
 dict =
     Dict.fromList [ ( "id", id ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]

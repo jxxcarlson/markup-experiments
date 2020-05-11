@@ -25,21 +25,6 @@ evalResult result =
             "Parse error"
 
 
-tag : String -> String -> String
-tag tag_ string =
-    "<" ++ tag_ ++ ">" ++ string ++ "</" ++ tag_ ++ ">"
-
-
-tagWithStyle : String -> String -> String -> String
-tagWithStyle style tag_ string =
-    "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"
-
-
-evalExprList : List Expr -> String
-evalExprList list =
-    tag "div" (List.map evalExpr list |> String.join "\n")
-
-
 evalExpr : Expr -> String
 evalExpr expr =
     case expr of
@@ -61,3 +46,22 @@ evalExpr expr =
 
         Function f ->
             String.trim f
+
+
+
+-- HELPERS
+
+
+tag : String -> String -> String
+tag tag_ string =
+    "<" ++ tag_ ++ ">" ++ string ++ "</" ++ tag_ ++ ">"
+
+
+tagWithStyle : String -> String -> String -> String
+tagWithStyle style tag_ string =
+    "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"
+
+
+evalExprList : List Expr -> String
+evalExprList list =
+    tag "div" (List.map evalExpr list |> String.join "\n")
