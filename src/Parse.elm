@@ -1,4 +1,4 @@
-module R1Parser exposing (..)
+module Parse exposing (Expr(..), parse)
 
 import Parser exposing (..)
 
@@ -8,6 +8,26 @@ type Expr
     | ExprList (List Expr)
     | Function String
     | FunctionApplication Expr Expr
+
+
+{-|
+
+    > parse "a b [f [g y]]"
+    Ok [
+        ExprList [Word ("a "),Word ("b ")]
+        ,FunctionApplication (Function ("f ")) (ExprList [Word "x"])
+        ,ExprList [Word ("c "),Word ("d ")]
+        ,FunctionApplication (Function ("f ")) (ExprList [Word "y"])
+       ]
+
+-}
+parse : String -> Result (List DeadEnd) (List Expr)
+parse =
+    run exprList
+
+
+
+-- CONSTANTS
 
 
 openTermC =
@@ -35,17 +55,7 @@ expr =
     oneOf [ functionApplication, words ]
 
 
-{-|
-
-    > run exprList "a b [f x] c d [f y]"
-    Ok [
-        ExprList [Word ("a "),Word ("b ")]
-        ,FunctionApplication (Function ("f ")) (ExprList [Word "x"])
-        ,ExprList [Word ("c "),Word ("d ")]
-        ,FunctionApplication (Function ("f ")) (ExprList [Word "y"])
-       ]
-
--}
+exprList : Parser (List Expr)
 exprList =
     manyp expr
 
