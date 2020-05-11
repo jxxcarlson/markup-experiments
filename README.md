@@ -9,6 +9,12 @@ Here is an example:
 This is a test: [strong [italic whatever!]]
 ```
 
+or perhaps just 
+
+```
+This is a test: [s [i whatever!]]
+```
+
 There is only one construct:
 
 ```
