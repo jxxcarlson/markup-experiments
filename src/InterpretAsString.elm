@@ -1,4 +1,4 @@
-module Interpreter exposing (evalExpr, evalExprList, evalResult)
+module InterpretAsString exposing (evalExpr, evalExprList, evalResult)
 
 import Parse exposing (Expr(..))
 import Parser exposing (DeadEnd)
