@@ -1,4 +1,4 @@
-module R3.Func exposing (apply, bold, code, composeList, dict, italic, red)
+module R3.Html.Func exposing (apply, bold, code, composeList, dict, italic, red)
 
 import Dict exposing (Dict)
 import Maybe.Extra

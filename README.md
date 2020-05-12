@@ -65,8 +65,8 @@ housed in modules `R1.Interpreter.String` and
 
 ```
     > import R1.Parse exposing(parse)
-    > import R1.Interpreter.String as S
-    > parse "a b [f [g y]]" |> S.evalResult
+    > import R1.Interpreter.String exposing(evalResult)
+    > parse "a b [f [g y]]" |> evalResult
     "a b [f [g y]]"
 ```
 
@@ -189,7 +189,10 @@ apply func str =
 Then we have
 
 ``` 
-    > parse "This is geek stuff: [code x = x + 1]" |> H.evalResult
+    > import R2.Parse exposing(parse)
+    > import R2.Html.Interpreter exposing(evalResult)
+
+    > parse "This is geek stuff: [code x = x + 1]" |> evalResult
     "<div>This  is  geek  stuff: \n<code>x  =  x  +  1</code></div>"
 ```
 

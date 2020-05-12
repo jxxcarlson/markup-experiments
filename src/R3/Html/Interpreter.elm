@@ -1,23 +1,23 @@
-module R3.Interpreter.Html exposing (..)
+module R3.Html.Interpreter exposing (..)
 
 import Dict
 import Maybe.Extra
 import Parser exposing (DeadEnd)
-import R3.Func as Func
-import R3.Parse exposing (Expr(..), FuncName(..), parse)
+import R3.Html.Func as Func
+import R3.Parse exposing (Expr(..), FuncName(..))
 
 
 {-| The functions `i` and `b` stand for italic and bold:
 
-      > import R3.Parse exposing(..)
-      > import R3.Interpreter.Html as H
+      > import R3.Parse exposing(parse)
+      > import R3.Html.Interpreter exposing(evalResult)
 
-      > parse "This is a [b.i real] test" |> H.evalResult
+      > parse "This is a [b.i real] test" |> evalResult
       "<div>This  is  a
       <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
       test</div>"
 
-      > parse "This is geek stuff: [code x = x + 1]" |> H.evalResult
+      > parse "This is geek stuff: [code x = x + 1]" |> evalResult
       "<div>This  is  geek  stuff: \n<code>x  =  x  +  1</code></div>"
 
 -}

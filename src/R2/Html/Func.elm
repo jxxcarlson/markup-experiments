@@ -1,4 +1,4 @@
-module R2.Func exposing (apply, bold, composeList, dict, italic, red)
+module R2.Html.Func exposing (apply, bold, composeList, dict, italic, red)
 
 import Dict exposing (Dict)
 
