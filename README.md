@@ -5,7 +5,7 @@ for the design of rational markup languages.
 
 ## Goals
 
-Some of the goals for the languages **Rn**:
+Some of the goals:
 
 - Simplicity
 
