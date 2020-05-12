@@ -182,6 +182,7 @@ typeOfFuncList : List Func -> Maybe FuncType
 ```
 
 and companion identity elements, where `idFattr` is as before and
+where the new element is
 
 ```elm
 idFTag : Func
@@ -192,12 +193,14 @@ idFTag =
 With these in hand, one modifies `compose` and
 `composeList` accordingly:
 
-- `composeList` check the type of its function list and 
+-  `compose` treats the two identity
+functions as *right* identities under composition.
+
+
+- `composeList` checks the type of its function list and 
 selects the corresponding identity element, with
 `idFTag` as the default (?? is this a sound approach ??).
 
--  `compose` is designed to treat the two identity
-functions as *right* identities under composition.
 
 
 
