@@ -83,11 +83,9 @@ validity of the parser.
     
     > check "Try [i [b this]] and that"
     (False,True)
-    
- The second example shows that the evalResult
- is not a left inverse of parse, but may be
- a left inverse modulo whitespace.
 ```
+
+ The second example shows that the evalResult is not a left inverse of parse, but may be a left inverse modulo whitespace.
 
 At the moment, our parser 'seems to be"
  injective up to white space.
