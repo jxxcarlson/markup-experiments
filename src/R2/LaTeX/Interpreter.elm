@@ -13,7 +13,7 @@ import R2.Parse exposing (Expr(..), FuncName(..), parse)
       > import R2.LaTeX.Interpreter exposing(evalResult)
 
       > parse "This is a [b.i real] test" |> evalResult
-      "This  is  a \\textit{\\textbf{real}} test"
+      "This  is  a \\textbf{\\textit{real}} test"
 
 -}
 evalResult : Result (List DeadEnd) (List Expr) -> String

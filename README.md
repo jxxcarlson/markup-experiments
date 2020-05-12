@@ -132,6 +132,7 @@ apply func str =
             applyAttributes attributes str
 ```
 
+
 Composition is defined like this:
 
 ```elm
@@ -157,6 +158,18 @@ idFAttr =
 
 At this point, `id` is a fake identity function.
 We will do better in language **R3**.
+
+### LaTeX
+
+```
+
+      > import R2.Parse exposing(parse)
+      > import R2.LaTeX.Interpreter exposing(evalResult)
+
+      > parse "This is a [b.i real] test" |> evalResult
+      "This  is  a \\textbf{\\textit{real}} test"
+
+```
 
 
 ## R3

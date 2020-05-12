@@ -13,6 +13,8 @@ type Func
 
 {-|
 
+    > import R2.LaTeX.Func exposing(..)
+
     > bold
     FMacro ["textbf"] : Func
 
@@ -20,7 +22,7 @@ type Func
     "\\textbf{this}"
 
     > apply (compose bold italic) "this"
-    "\\textbf{\\textit{this}}"
+    "\\textbf{\\textit{this}} "
 
     > apply (composeList [ bold,  italic, red]) "this"
     "\\red{\\textit{\\textbf{this}}}" : String
@@ -68,18 +70,18 @@ compose f g =
 {-|
 
     > composeList [ bold,  italic, red]
-    FMacro ["red","textit","textbf"] : Func
+    FMacro ["textbf","textit","red"]
 
 -}
 composeList : List Func -> Func
 composeList funcs =
-    List.foldl (\f acc -> compose f acc) id funcs
-        |> funcDropLast
+    List.foldl (\f acc -> compose acc f) id funcs
+        |> funcDropFirst
 
 
-funcDropLast : Func -> Func
-funcDropLast (FMacro args) =
-    FMacro (dropLast args)
+funcDropFirst : Func -> Func
+funcDropFirst (FMacro args) =
+    FMacro (List.drop 1 args)
 
 
 dropLast : List a -> List a
