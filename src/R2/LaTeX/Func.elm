@@ -1,49 +1,93 @@
-module R2.LaTeX.Func exposing (apply, bold, composeList, dict, italic, red)
+module R2.LaTeX.Func exposing (apply, applyMacro, bold, compose, composeList, dict, italic, red)
 
 import Dict exposing (Dict)
 
 
-type alias AttributeList =
-    List ( String, String )
+type alias MacroName =
+    String
 
 
 type Func
-    = FAttr AttributeList
+    = FMacro (List MacroName)
 
 
 {-|
 
-    > parse "[red.i.b test]" |> evalResult
-    "<div><span style=font-weight:bold;font-style:italic;color:red;foo:bar >test</span></div>
+    > bold
+    FMacro ["textbf"] : Func
+
+    > apply bold "this"
+    "\\textbf{this}"
+
+    > apply (compose bold italic) "this"
+    "\\textbf{\\textit{this}}"
+
+    > apply (composeList [ bold,  italic, red]) "this"
+    "\\red{\\textit{\\textbf{this}}}" : String
 
 -}
 apply : Func -> String -> String
 apply func str =
     case func of
-        FAttr attributes ->
-            applyAttributes attributes str
+        FMacro macroName ->
+            applyMacro macroName str
 
 
-applyAttributes : AttributeList -> String -> String
-applyAttributes attrList str =
+applyMacro : List MacroName -> String -> String
+applyMacro macroNames_ str =
     let
-        attr =
-            List.map (\( k, v ) -> k ++ ":" ++ v) attrList
-                |> String.join ";"
+        macroNames =
+            List.reverse macroNames_
+
+        firstMacro =
+            List.head macroNames |> Maybe.withDefault "id"
+
+        otherMacros =
+            List.drop 1 macroNames
+
+        apply_ : MacroName -> String -> String
+        apply_ macroName_ str_ =
+            "\\" ++ macroName_ ++ "{" ++ str_ ++ "}"
     in
-    tagWithStyle attr "span" str
+    List.foldl (\macro_ acc -> apply_ macro_ acc) (apply_ firstMacro str) otherMacros ++ " "
 
 
+{-|
+
+    > compose red bold
+    FMacro ["red","textbf"] : Func
+
+-}
 compose : Func -> Func -> Func
 compose f g =
     case ( f, g ) of
-        ( FAttr ff, FAttr gg ) ->
-            FAttr (ff ++ gg)
+        ( FMacro ff, FMacro gg ) ->
+            FMacro (ff ++ gg)
 
 
+{-|
+
+    > composeList [ bold,  italic, red]
+    FMacro ["red","textit","textbf"] : Func
+
+-}
 composeList : List Func -> Func
 composeList funcs =
-    List.foldl (\f acc -> compose f acc) idFAttr funcs
+    List.foldl (\f acc -> compose f acc) id funcs
+        |> funcDropLast
+
+
+funcDropLast : Func -> Func
+funcDropLast (FMacro args) =
+    FMacro (dropLast args)
+
+
+dropLast : List a -> List a
+dropLast list =
+    list
+        |> List.reverse
+        |> List.drop 1
+        |> List.reverse
 
 
 
@@ -52,29 +96,24 @@ composeList funcs =
 
 dict : Dict String Func
 dict =
-    Dict.fromList [ ( "id", idFAttr ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
+    Dict.fromList [ ( "id", id ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
 
 
-idFAttr : Func
-idFAttr =
-    FAttr [ ( "*", "*" ) ]
+id : Func
+id =
+    FMacro [ "id" ]
 
 
 red : Func
 red =
-    FAttr [ ( "color", "red" ) ]
+    FMacro [ "red" ]
 
 
 italic : Func
 italic =
-    FAttr [ ( "font-style", "italic" ) ]
+    FMacro [ "textit" ]
 
 
 bold : Func
 bold =
-    FAttr [ ( "font-weight", "bold" ) ]
-
-
-tagWithStyle : String -> String -> String -> String
-tagWithStyle style tag_ string =
-    "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"
+    FMacro [ "textbf" ]

@@ -9,13 +9,11 @@ import R2.Parse exposing (Expr(..), FuncName(..), parse)
 
 {-| The functions `i` and `b` stand for italic and bold:
 
-      > import R2.Parse exposing(..)
-      > import R2.Interpreter.Html as H
+      > import R2.Parse exposing(parse)
+      > import R2.LaTeX.Interpreter exposing(evalResult)
 
-      > parse "This is a [b [i real]] test" |> H.evalResult
-      "<div>This  is  a
-      <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
-      test</div>"
+      > parse "This is a [b.i real] test" |> evalResult
+      "This  is  a \\textit{\\textbf{real}} test"
 
 -}
 evalResult : Result (List DeadEnd) (List Expr) -> String
@@ -55,16 +53,6 @@ evalExpr expr =
 -- HELPERS
 
 
-tag : String -> String -> String
-tag tag_ string =
-    "<" ++ tag_ ++ ">" ++ string ++ "</" ++ tag_ ++ ">"
-
-
-tagWithStyle : String -> String -> String -> String
-tagWithStyle style tag_ string =
-    "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"
-
-
 evalExprList : List Expr -> String
 evalExprList list =
-    tag "div" (List.map evalExpr list |> String.join "\n")
+    List.map evalExpr list |> String.join ""

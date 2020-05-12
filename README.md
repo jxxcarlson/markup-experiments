@@ -13,6 +13,11 @@ Some of the goals for the languages **Rn**:
 
 - Compile to Html and LaTeX
 
+For a version which includes rendering to LaTeX, see 
+language **R2**.
+
+This is a work in progress.
+
 
 ## R1
 
