@@ -173,7 +173,7 @@ code =
     FTag "code"
 ```
 
-The meaning of this function is defined by the interpreter:
+The meaning of this function is defined by `Func.apply`:
 
 ```elm
 apply : Func -> String -> String
