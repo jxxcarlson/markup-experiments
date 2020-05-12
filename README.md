@@ -1,7 +1,7 @@
 # Rational Markup Languages
 
 We collect here  a series of experiments intended 
-for the design ofrational markup languages. 
+for the design of rational markup languages. 
 
 ## Goals
 
