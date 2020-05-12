@@ -75,11 +75,6 @@ bold =
     FAttr [ ( "font-weight", "bold" ) ]
 
 
-
---compose : List SpanFunction -> SpanFunction
---compose fs =
-
-
 tagWithStyle : String -> String -> String -> String
 tagWithStyle style tag_ string =
     "<" ++ tag_ ++ " style=" ++ style ++ " >" ++ string ++ "</" ++ tag_ ++ ">"

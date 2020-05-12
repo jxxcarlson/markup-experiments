@@ -1,8 +1,32 @@
 # Rational Markup Languages
 
 We collect here  a series of experiments in 
-designing a rational markup language.
+designing a rational markup language. The language 
+**R1** is the simplest, admitting constructs such 
+as 
 
+```
+    This is a test: [b [i whatever!]]
+```
+
+where `b` stands for "bold" and `i` for "italic".
+In language **R2** one can say this as well, but
+one cal also say 
+
+```
+    This is a test: [b.i whatever!]
+```
+
+The expression `b.i` is the composition of the functions
+`b` and `i`.  
+
+Some of the goals for the languages **Rn**:
+
+- Simplicity
+
+- Consistency
+
+- Compile to Html and LaTeX
 
 ## Language R1
 
@@ -63,23 +87,25 @@ For injective parser, the source text is recoverable
 fromm the AST.  As a convenience for testing such parsers,
 we have the following code:
 
-```elm
-{-| A round-trip test of the
+```
+A round-trip test of the
 validity of the parser.
--}
-check : String -> Status
-check str =
-    case evalResult (parse str) == str of
-        True ->
-            Pass
 
-        False ->
-            Fail
+    > check "Try [i [b this]]"
+    (True,True) 
+    
+    > check "Try [i [b this]] and that"
+    (False,True)
+    
+ The second example shows that the evalResult
+ is not a left inverse of parse, but may be
+ a left inverse modulo whitespace.
 ```
 
-At the moment, our parser is "injective" up to white space.
+At the moment, our parser 'seems to be"
+ injective up to white space.
 
-(Ha ha! proof needed for this assertion)
+
 
 ### Eval as Html
 
@@ -104,6 +130,6 @@ This is more compact than
 
 > "This is a [b [i real]] test"
 
-The idea is that the function
+The idea is that the function with name
  `b.i` is the composition of the functions  with names
  `b` and `i`.

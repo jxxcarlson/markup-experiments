@@ -1,4 +1,4 @@
-module R1.InterpretAsString exposing (check, evalExpr, evalExprList, evalResult)
+module R1.Interpreter.String exposing (check, evalExpr, evalExprList, evalResult)
 
 import Parser exposing (DeadEnd)
 import R1.Parse exposing (Expr(..), parse)
@@ -6,20 +6,27 @@ import R1.Parse exposing (Expr(..), parse)
 
 {-| A round-trip test of the
 validity of the parser.
+
+    > import R1.Interpreter.String exposing(..)
+
+    > check "Try [i [b this]]"
+    (True,True)
+
+    > check "Try [i [b this]] and that"
+    (False,True)
+
+The second example shows that the evalResult
+is not a left inverse of parse, but may be
+a left inverse modulo whitespace.
+
 -}
-check : String -> Status
+check : String -> ( Bool, Bool )
 check str =
-    case evalResult (parse str) == str of
-        True ->
-            Pass
-
-        False ->
-            Fail
-
-
-type Status
-    = Pass
-    | Fail
+    let
+        roundTrip =
+            evalResult (parse str)
+    in
+    ( roundTrip == str, String.replace " " "" roundTrip == String.replace " " "" str )
 
 
 {-|

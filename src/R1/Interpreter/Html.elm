@@ -1,4 +1,4 @@
-module R1.InterpretAsHtml exposing (..)
+module R1.Interpreter.Html exposing (..)
 
 import Parser exposing (DeadEnd)
 import R1.Parse exposing (Expr(..), parse)
@@ -6,7 +6,10 @@ import R1.Parse exposing (Expr(..), parse)
 
 {-| The functions `i` and `b` stand for itqlic and bold:
 
-      > parse "This is a [b [i real]] test" |> H.evalResult
+    > import R1.Parse exposing(..)
+    > import R1.Interpreter.Html as H
+
+    > parse "This is a [b [i real]] test" |> H.evalResult
       "<div>This  is  a
       <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
       test</div>"
