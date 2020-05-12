@@ -186,6 +186,13 @@ apply func str =
             tag tagName str
 ```
 
+The we have
+
+``` 
+    > parse "This is geek stuff: [code x = x + 1]" |> H.evalResult
+    "<div>This  is  geek  stuff: \n<code>x  =  x  +  1</code></div>"
+```
+
 In order to make function composition work, we
 need to introduce a rudimentary type system,
 where
