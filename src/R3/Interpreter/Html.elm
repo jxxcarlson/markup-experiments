@@ -3,8 +3,8 @@ module R3.Interpreter.Html exposing (..)
 import Dict
 import Maybe.Extra
 import Parser exposing (DeadEnd)
-import R2.Func as Func
-import R2.Parse exposing (Expr(..), FuncName(..), parse)
+import R3.Func as Func
+import R3.Parse exposing (Expr(..), FuncName(..), parse)
 
 
 {-| The functions `i` and `b` stand for italic and bold:
@@ -16,6 +16,9 @@ import R2.Parse exposing (Expr(..), FuncName(..), parse)
       "<div>This  is  a
       <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
       test</div>"
+
+      > parse "This is geek stuff: [code x = x + 1]" |> H.evalResult
+      "<div>This  is  geek  stuff: \n<code>x  =  x  +  1</code></div>"
 
 -}
 evalResult : Result (List DeadEnd) (List Expr) -> String
