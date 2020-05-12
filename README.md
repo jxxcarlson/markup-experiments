@@ -145,12 +145,12 @@ composeList funcs =
 where
 
 ```elm
-id : Func
-id =
+idFAttr : Func
+idFAttr =
     FAttr [ ( "*", "*" ) ]
 ```
 
-At this point `id` is a fake identity function.
+At this point, `id` is a fake identity function.
 We will do better in language **R3**.
 
 
@@ -181,14 +181,9 @@ typeOfFunc : Func -> FuncType
 typeOfFuncList : List Func -> Maybe FuncType
 ```
 
-and companion identity elements:
+and companion identity elements, where `idFattr` is as before and
 
 ```elm
-idFAttr : Func
-idFAttr =
-    FAttr [ ( "*", "*" ) ]
-
-
 idFTag : Func
 idFTag =
     FTag "*"

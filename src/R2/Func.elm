@@ -43,7 +43,7 @@ compose f g =
 
 composeList : List Func -> Func
 composeList funcs =
-    List.foldl (\f acc -> compose f acc) id funcs
+    List.foldl (\f acc -> compose f acc) idFAttr funcs
 
 
 
@@ -52,11 +52,11 @@ composeList funcs =
 
 dict : Dict String Func
 dict =
-    Dict.fromList [ ( "id", id ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
+    Dict.fromList [ ( "id", idFAttr ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
 
 
-id : Func
-id =
+idFAttr : Func
+idFAttr =
     FAttr [ ( "*", "*" ) ]
 
 
