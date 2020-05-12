@@ -6,10 +6,10 @@ import R1.Parse exposing (Expr(..), parse)
 
 {-| The functions `i` and `b` stand for itqlic and bold:
 
-    > import R1.Parse exposing(..)
-    > import R1.Interpreter.Html as H
+    > import R1.Parse exposing(parse)
+    > import R1.Interpreter.Html exposing(evalResult)
 
-    > parse "This is a [b [i real]] test" |> H.evalResult
+    > parse "This is a [b [i real]] test" |> evalResult
       "<div>This  is  a
       <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
       test</div>"
