@@ -17,8 +17,7 @@ Some of the goals for the languages **Rn**:
 ## R1
 
 The language 
-**R1** is the simplest, admitting constructs such 
-as 
+**R1** is the simplest, admitting constructs such as 
 
 ```
     This is a test: [b [i whatever!]]
@@ -71,10 +70,8 @@ housed in modules `R1.Interpreter.String` and
     "a b [f [g y]]"
 ```
 
-We would like for `evalResult` to be a left inverse of `parse`.  
-A parser with a left inverse is said to be *injective*. 
-For injective parser, the source text is recoverable 
-fromm the AST.  As a convenience for testing such parsers,
+We would like for `evalResult` to be a left inverse of `parse`.  A parser with a left inverse is said to be *injective*. 
+For injective parser, the source text is recoverable fromm the AST.  As a convenience for testing such parsers,
 we have the following code:
 
 ```
