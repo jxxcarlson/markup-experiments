@@ -87,14 +87,12 @@ validity of the parser.
 
  The second example shows that the evalResult is not a left inverse of parse, but may be a left inverse modulo whitespace.
 
-At the moment, our parser 'seems to be"
- injective up to white space.
 
 
 ## R2
 
-In language **R2** one can say this as well, but
-one cal also say 
+In language **R2** one can say `This is a test: [b [i whatever!]]`, but
+one can also say 
 
 ```
     This is a test: [b.i whatever!]
