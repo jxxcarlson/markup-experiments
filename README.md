@@ -200,6 +200,8 @@ functions as *right* identities under composition.
 - `composeList` checks the type of its function list and 
 selects the corresponding identity element, with
 `idFTag` as the default (?? is this a sound approach ??).
+A function list has type `Just T` if all of its elements have
+type `T`.  Otherwise it has type 'Nothing'
 
 
 
