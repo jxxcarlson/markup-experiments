@@ -164,6 +164,28 @@ type Func
     = FAttr AttributeList
     | FTag TagName
 ```
+
+Example:
+
+```elm
+code : Func
+code =
+    FTag "code"
+```
+
+The meaning of this function is defined by the interpreter:
+
+```elm
+apply : Func -> String -> String
+apply func str =
+    case func of
+        FAttr attributes ->
+            applyAttributes attributes str
+
+        FTag tagName ->
+            tag tagName str
+```
+
 In order to make function composition work, we
 need to introduce a rudimentary type system,
 where
