@@ -173,7 +173,7 @@ code =
     FTag "code"
 ```
 
-The meaning of this function is defined by `Func.apply`:
+The meaning of `code` is defined by `Func.apply`:
 
 ```elm
 apply : Func -> String -> String
@@ -186,7 +186,7 @@ apply func str =
             tag tagName str
 ```
 
-The we have
+Then we have
 
 ``` 
     > parse "This is geek stuff: [code x = x + 1]" |> H.evalResult
