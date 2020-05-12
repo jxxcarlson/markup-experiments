@@ -39,18 +39,13 @@ evalExpr expr =
 
         FunctionApplication fns args ->
             let
-                maybeFunc =
+                func =
                     fns
                         |> List.map (\(F f_) -> Dict.get f_ Func.dict)
                         |> Maybe.Extra.values
                         |> Func.composeList
             in
-            case maybeFunc of
-                Nothing ->
-                    " [f compose error: " ++ evalExpr args ++ "] "
-
-                Just func ->
-                    Func.apply func (evalExpr args)
+            Func.apply func (evalExpr args)
 
         Function f ->
             String.trim f
