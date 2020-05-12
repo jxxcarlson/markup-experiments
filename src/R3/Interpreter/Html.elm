@@ -1,4 +1,4 @@
-module R2.Interpreter.Html exposing (..)
+module R3.Interpreter.Html exposing (..)
 
 import Dict
 import Maybe.Extra
@@ -9,10 +9,10 @@ import R2.Parse exposing (Expr(..), FuncName(..), parse)
 
 {-| The functions `i` and `b` stand for italic and bold:
 
-      > import R2.Parse exposing(..)
-      > import R2.Interpreter.Html as H
+      > import R3.Parse exposing(..)
+      > import R3.Interpreter.Html as H
 
-      > parse "This is a [b [i real]] test" |> H.evalResult
+      > parse "This is a [b.i real] test" |> H.evalResult
       "<div>This  is  a
       <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
       test</div>"
