@@ -1,7 +1,6 @@
-module R2.Func exposing (apply, bold, code, composeList, dict, italic, red)
+module R2.Func exposing (apply, bold, composeList, dict, italic, red)
 
 import Dict exposing (Dict)
-import Maybe.Extra
 
 
 type alias AttributeList =
@@ -10,16 +9,6 @@ type alias AttributeList =
 
 type Func
     = FAttr AttributeList
-    | FTag TagName
-
-
-type FuncType
-    = TAttr
-    | TTag
-
-
-type alias TagName =
-    String
 
 
 {-|
@@ -34,9 +23,6 @@ apply func str =
         FAttr attributes ->
             applyAttributes attributes str
 
-        FTag tagName ->
-            tag tagName str
-
 
 applyAttributes : AttributeList -> String -> String
 applyAttributes attrList str =
@@ -48,73 +34,16 @@ applyAttributes attrList str =
     tagWithStyle attr "span" str
 
 
-compose : Func -> Func -> Maybe Func
+compose : Func -> Func -> Func
 compose f g =
     case ( f, g ) of
         ( FAttr ff, FAttr gg ) ->
-            case gg == [ ( "*", "*" ) ] of
-                True ->
-                    FAttr ff |> Just
-
-                False ->
-                    FAttr (ff ++ gg) |> Just
-
-        ( FTag ff, FTag gg ) ->
-            case gg == "*" of
-                True ->
-                    FTag ff |> Just
-
-                False ->
-                    Nothing
-
-        ( _, _ ) ->
-            Nothing
+            FAttr (ff ++ gg)
 
 
-typeOfFunc : Func -> FuncType
-typeOfFunc func =
-    case func of
-        FAttr _ ->
-            TAttr
-
-        FTag _ ->
-            TTag
-
-
-typeOfFuncList : List Func -> Maybe FuncType
-typeOfFuncList funcList =
-    let
-        firstType =
-            List.head funcList
-                |> Maybe.map typeOfFunc
-                |> Maybe.withDefault TTag
-    in
-    case List.all (\t -> t == firstType) (List.map typeOfFunc funcList) of
-        True ->
-            Just firstType
-
-        False ->
-            Nothing
-
-
-composeList : List Func -> Maybe Func
+composeList : List Func -> Func
 composeList funcs =
-    let
-        id =
-            case typeOfFuncList funcs of
-                Just TAttr ->
-                    idFAttr
-
-                Just TTag ->
-                    idFTag
-
-                Nothing ->
-                    idFTag
-    in
-    List.foldl
-        (\f acc -> Maybe.map2 compose f acc |> Maybe.Extra.join)
-        (Just id)
-        (List.map Just funcs)
+    List.foldl (\f acc -> compose f acc) id funcs
 
 
 
@@ -123,22 +52,12 @@ composeList funcs =
 
 dict : Dict String Func
 dict =
-    Dict.fromList
-        [ ( "i", italic )
-        , ( "b", bold )
-        , ( "red", red )
-        , ( "code", code )
-        ]
+    Dict.fromList [ ( "id", id ), ( "i", italic ), ( "b", bold ), ( "red", red ) ]
 
 
-idFAttr : Func
-idFAttr =
-    FAttr [ ( "*", "*" ) ]
-
-
-idFTag : Func
-idFTag =
-    FTag "*"
+id : Func
+id =
+    FAttr [ ( "foo", "bar" ) ]
 
 
 red : Func
@@ -154,20 +73,6 @@ italic =
 bold : Func
 bold =
     FAttr [ ( "font-weight", "bold" ) ]
-
-
-code : Func
-code =
-    FTag "code"
-
-
-
--- HELPERS
-
-
-tag : String -> String -> String
-tag tag_ string =
-    "<" ++ tag_ ++ ">" ++ string ++ "</" ++ tag_ ++ ">"
 
 
 tagWithStyle : String -> String -> String -> String
