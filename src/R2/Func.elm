@@ -57,7 +57,7 @@ dict =
 
 id : Func
 id =
-    FAttr [ ( "foo", "bar" ) ]
+    FAttr [ ( "*", "*" ) ]
 
 
 red : Func

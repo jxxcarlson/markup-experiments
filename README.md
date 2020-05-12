@@ -1,24 +1,9 @@
 # Rational Markup Languages
 
 We collect here  a series of experiments in 
-designing a rational markup language. The language 
-**R1** is the simplest, admitting constructs such 
-as 
+designing a rational markup language. 
 
-```
-    This is a test: [b [i whatever!]]
-```
-
-where `b` stands for "bold" and `i` for "italic".
-In language **R2** one can say this as well, but
-one cal also say 
-
-```
-    This is a test: [b.i whatever!]
-```
-
-The expression `b.i` is the composition of the functions
-`b` and `i`.  
+## Goals
 
 Some of the goals for the languages **Rn**:
 
@@ -28,29 +13,26 @@ Some of the goals for the languages **Rn**:
 
 - Compile to Html and LaTeX
 
-## Language R1
 
+## R1
 
-Here is an example of a piece of text in the langauge
-R1:
-
-```
-This is a test: [bold [italic whatever!]]
-```
-
-or perhaps just 
+The language 
+**R1** is the simplest, admitting constructs such 
+as 
 
 ```
-This is a test: [b [i whatever!]]
+    This is a test: [b [i whatever!]]
 ```
 
-There is only one construct:
+where `b` stands for "bold" and `i` for "italic".
 
-```
-[FUNCTION_NAME ARGLIST]
-```
 
 ### AST
+
+The type of the abstract syntax
+for **R1** captures the notion of word, function,
+and function application, as well as the notion 
+of a list of expressions.
 
 ```elm
 type Expr
@@ -60,7 +42,7 @@ type Expr
     | FunctionApplication Expr Expr
 ```
 
-### Parse 
+Example:
 
 ```elm
     parse "a b [f [g y]]"
@@ -72,12 +54,20 @@ type Expr
        ]
 ```
 
+
 ### Eval
 
-For now, just evaluate to a string:
+At the moment, there are two interpreters,
+housed in modules `R1.Interpreter.String` and 
+`R1.Interpreter.Html`, each with its own 
+`eval` function.  Here is an example:
+
+
 
 ```
-    > parse "a b [f [g y]]" |> evalResult
+    > import R1.Parse exposing(parse)
+    > import R1.Interpreter.String as S
+    > parse "a b [f [g y]]" |> S.evalResult
     "a b [f [g y]]"
 ```
 
@@ -106,30 +96,121 @@ At the moment, our parser 'seems to be"
  injective up to white space.
 
 
+## R2
 
-### Eval as Html
-
-Using module `InterpretAsHtml`, we have
+In language **R2** one can say this as well, but
+one cal also say 
 
 ```
-      > parse "This is a [b [i real]] test" |> H.evalResult
-      "<div>This  is  a
-      <span style=font-weight:bold ><span style=font-style:italic >real</span></span>
-      test</div>"
+    This is a test: [b.i whatever!]
 ```
 
-## Language R2
+The expression `b.i` is the composition of the functions
+`b` and `i`.  To make function composition work,
+we introduce
 
-The R2 makes it possible to write text like
 
-> "This is a [b.i real] test"
+```elm
+type Func
+    = FAttr AttributeList
+```
 
- 
-where `b` means `bold` and `i` means `italic`.
-This is more compact than
+A typical function looks like this:
 
-> "This is a [b [i real]] test"
+```elm
+red : Func
+red =
+    FAttr [ ( "color", "red" ) ]
+```
 
-The idea is that the function with name
- `b.i` is the composition of the functions  with names
- `b` and `i`.
+It is just a piece of data whose meaning as 
+a function is defined by 
+
+```elm
+apply : Func -> String -> String
+apply func str =
+    case func of
+        FAttr attributes ->
+            applyAttributes attributes str
+```
+
+Composition is defined like this:
+
+```elm
+compose : Func -> Func -> Func
+compose f g =
+    case ( f, g ) of
+        ( FAttr ff, FAttr gg ) ->
+            FAttr (ff ++ gg)
+
+
+composeList : List Func -> Func
+composeList funcs =
+    List.foldl (\f acc -> compose f acc) id funcs
+```
+
+where
+
+```elm
+id : Func
+id =
+    FAttr [ ( "*", "*" ) ]
+```
+
+At this point `id` is a fake identity function.
+We will do better in language **R3**.
+
+
+## R3
+
+The language **R3** builds on the notion
+of function, of which there are now two types:
+
+```elm
+type Func
+    = FAttr AttributeList
+    | FTag TagName
+```
+In order to make function composition work, we
+need to introduce a rudimentary type system,
+where
+
+```elm
+type FuncType
+    = TAttr
+    | TTag
+```
+with functions 
+
+```elm
+typeOfFunc : Func -> FuncType
+
+typeOfFuncList : List Func -> Maybe FuncType
+```
+
+and companion identity elements:
+
+```elm
+idFAttr : Func
+idFAttr =
+    FAttr [ ( "*", "*" ) ]
+
+
+idFTag : Func
+idFTag =
+    FTag "*"
+```
+
+With these in hand, one modifies `compose` and
+`composeList` accordingly:
+
+- `composeList` check the type of its function list and 
+selects the corresponding identity element, with
+`idFTag` as the default (?? is this a sound approach ??).
+
+-  `compose` is designed to treat the two identity
+functions as *right* identities under composition.
+
+
+
+
