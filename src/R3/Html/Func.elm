@@ -11,11 +11,17 @@ type alias AttributeList =
 type Func
     = FAttr AttributeList
     | FTag TagName
+    | F (String -> String)
 
 
 type FuncType
     = TAttr
     | TTag
+    | TF
+
+
+type alias FData =
+    { name : String, body : String -> String }
 
 
 type alias TagName =
@@ -36,6 +42,9 @@ apply func str =
 
         FTag tagName ->
             tag tagName str
+
+        F f ->
+            f str
 
 
 applyAttributes : AttributeList -> String -> String
@@ -67,6 +76,9 @@ compose f g =
                 False ->
                     Nothing
 
+        ( F ff, F gg ) ->
+            Just (F (ff << gg))
+
         ( _, _ ) ->
             Nothing
 
@@ -79,6 +91,9 @@ typeOfFunc func =
 
         FTag _ ->
             TTag
+
+        F _ ->
+            TF
 
 
 typeOfFuncList : List Func -> Maybe FuncType
@@ -108,6 +123,9 @@ composeList funcs =
                 Just TTag ->
                     idFTag
 
+                Just TF ->
+                    idF
+
                 Nothing ->
                     idFTag
     in
@@ -128,6 +146,7 @@ dict =
         , ( "b", bold )
         , ( "red", red )
         , ( "code", code )
+        , ( "math", F (\x -> "$" ++ x ++ "$") )
         ]
 
 
@@ -139,6 +158,11 @@ idFAttr =
 idFTag : Func
 idFTag =
     FTag "*"
+
+
+idF : Func
+idF =
+    F identity
 
 
 red : Func

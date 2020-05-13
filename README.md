@@ -171,16 +171,19 @@ We will do better in language **R3**.
 
 ```
 
+Note that the implementations of `Func` in `R3.Html` and `R3.LaTeX` are
+quite different.
 
 ## R3
 
 The language **R3** builds on the notion
-of function, of which there are now two types:
+of function, of which there are now three types:
 
 ```elm
 type Func
     = FAttr AttributeList
     | FTag TagName
+    | F (String -> String)
 ```
 
 Example:
@@ -202,6 +205,9 @@ apply func str =
 
         FTag tagName ->
             tag tagName str
+
+        F f ->
+            f str
 ```
 
 Then we have
@@ -212,6 +218,9 @@ Then we have
 
     > parse "This is geek stuff: [code x = x + 1]" |> evalResult
     "<div>This  is  geek  stuff: \n<code>x  =  x  +  1</code></div>"
+
+    > parse "[math a^2 + b^2 = c^2]" |> evalResult
+    "<div>$a^2  +  b^2  =  c^2$</div>"
 ```
 
 In order to make function composition work, we
@@ -222,6 +231,7 @@ where
 type FuncType
     = TAttr
     | TTag
+    | TF
 ```
 with functions 
 
@@ -232,19 +242,24 @@ typeOfFuncList : List Func -> Maybe FuncType
 ```
 
 and companion identity elements, where `idFattr` is as before and
-where the new element is
+where the new elements are
 
 ```elm
 idFTag : Func
 idFTag =
     FTag "*"
+
+idF : Func
+idF =
+    F identity
 ```
 
 With these in hand, one modifies `compose` and
 `composeList` accordingly:
 
 -  `compose` treats the two identity
-functions as *right* identities under composition.
+functions `idFTag` and `idF` as *right* identities under composition, while
+`idF` is a *bona fide* identity element.
 
 
 - `composeList` checks the type of its function list and 
