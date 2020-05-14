@@ -20,7 +20,7 @@ For a version which includes rendering to LaTeX, see
 language **R2**. See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
 for an overview.
 
-Languages:
+## Languages
 
 - **M1** has very simple blocks, nothing more.  Blocks start with `|`
 - **R1** has simple inline elements like `[i ....]` for italic. 
