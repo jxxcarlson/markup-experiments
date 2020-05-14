@@ -13,8 +13,11 @@ Some of the goals:
 
 - Compile to Html and LaTeX
 
+There are two series of examples, **M** and **R**. For
+now the **M** series addresses block structure only 
+and the **R** series addreses inline elements only.
 For a version which includes rendering to LaTeX, see 
-language **R2**.  See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
+language **R2**. See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
 for an overview.
 
 
