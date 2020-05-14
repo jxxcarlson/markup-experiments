@@ -32,8 +32,12 @@ the necessity of a rudimentary type system so that function
 composition will work.  Here function composition is partially defined
 in that only functions of the same type can be composed. In this
 approach, it is necessary to introduce identity elements for 
-composition for each function type
+composition for each function type.
 
+See [Arith, parsing](https://medium.com/@jxxcarlson/implementing-the-mini-language-arith-in-elm-a522f9a7101)
+[Arith, type checking](https://medium.com/@jxxcarlson/type-checking-the-mini-language-arith-in-elm-c752e3e77a97), 
+and [this repo](https://github.com/jxxcarlson/arith) for simple
+examples of parsing and type-checking using Elm.
 
 This is a work in progress.  
 
