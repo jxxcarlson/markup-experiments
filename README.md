@@ -52,8 +52,7 @@ The type
 of a block is given by the word following
 the pipe character.  The remaining 
 words of the block header are viewed 
-as arguments to the block, which 
-we think of as a function.  See
+as arguments to the block header.  See
 [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
 for more details.
 
