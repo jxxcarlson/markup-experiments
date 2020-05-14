@@ -95,8 +95,9 @@ The language
 
 where `b` stands for "bold" and `i` for "italic".
 
-**Note.** It would be nice to use the pipe characer
-instead of brackets for inline elements.  But as far
+**Note.** It would be nice to use the pipe character
+instead of brackets for inline elements so as to have
+a more uniform and non-noisy syntax.  But as far
 as I can see, this can only work if inline elements
 cannot be nested. (???) Also in favor of brackets is that the
 shift key does not have to be used.  
