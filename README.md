@@ -102,7 +102,7 @@ as I can see, this can only work if inline elements
 cannot be nested. (???) Also in favor of brackets is that the
 shift key does not have to be used.  In all of these cases
 the inline delimiters become reserved characters, so we would
-need a means of escape, e.g.. `\[`, etc. 
+need a means of escape, e.g, `\[`, etc. Yuuk!
 
 ### AST
 
