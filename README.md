@@ -14,7 +14,7 @@ Some of the goals:
 - Compile to Html and LaTeX
 
 There are two series of examples, **M** and **R**. For
-now the **M** series addresses block structure only 
+now, the **M** series addresses block structure only 
 and the **R** series addreses inline elements only.
 For a version which includes rendering to LaTeX, see 
 language **R2**. See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
@@ -95,6 +95,10 @@ The language
 
 where `b` stands for "bold" and `i` for "italic".
 
+**Note.** It would be nice to use the pipe characer
+instead of brackets for inline elements.  But as far
+as I can see, this can only work if inline elements
+cannot be nested. (???)
 
 ### AST
 
