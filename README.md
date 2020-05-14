@@ -98,7 +98,8 @@ where `b` stands for "bold" and `i` for "italic".
 **Note.** It would be nice to use the pipe characer
 instead of brackets for inline elements.  But as far
 as I can see, this can only work if inline elements
-cannot be nested. (???)
+cannot be nested. (???) Also in favor of brackets is that the
+shift key does not have to be used.  
 
 ### AST
 
