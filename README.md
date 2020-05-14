@@ -14,7 +14,9 @@ Some of the goals:
 - Compile to Html and LaTeX
 
 For a version which includes rendering to LaTeX, see 
-language **R2**.
+language **R2**.  See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
+for an overview.
+
 
 This is a work in progress.  
 
@@ -38,7 +40,12 @@ paragraphs.
 
 Blocks are either *plain* or *marked*. 
 Marked blocks begin 
-with the leading character |. The type
+with the leading character |. In the 
+example above, the headings and 
+subheadings  are marked blocks, indicated
+by `|h` and `|s`, respectively, while
+ordinary paragraphs are unmarked blocks. 
+The type
 of a block is given by the word following
 the pipe character.  The remaining 
 words of the block header are viewed 
