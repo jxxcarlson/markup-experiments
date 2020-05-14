@@ -39,7 +39,7 @@ See [Arith: parsing](https://medium.com/@jxxcarlson/implementing-the-mini-langua
 and [this repo](https://github.com/jxxcarlson/arith) for simple
 examples of parsing and type-checking using Elm.
 
-This is a work in progress.  
+All this is a work in progress.  
 
 ## M1
 
