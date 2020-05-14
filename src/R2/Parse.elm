@@ -16,8 +16,10 @@ type FuncName
 
 {-|
 
-> parse "[red.i.b test]" |> evalResult
-> "<div><span style=font-weight:bold;font-style:italic;color:red;foo:bar >test</span></div>
+    > import R2.Parse exposing(parse)
+
+    > parse "[red.i.b test]" |> evalResult
+    > "<div><span style=font-weight:bold;font-style:italic;color:red;foo:bar >test</span></div>
 
 -}
 parse : String -> Result (List DeadEnd) (List Expr)

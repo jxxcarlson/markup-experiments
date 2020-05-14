@@ -16,13 +16,68 @@ Some of the goals:
 For a version which includes rendering to LaTeX, see 
 language **R2**.
 
-This is a work in progress.
+This is a work in progress.  
+
+## M1
+
+The language **M1** defines a very simple block element and nothing
+more.  Here is an example:
+
+``` 
+|h Intro
+
+Trying out a new
+language here
+
+|s Basics
+
+There are three elements:
+headings, subheadings, and
+paragraphs.
+```
+
+Blocks are either *plain* or *marked*. 
+Marked blocks begin 
+with the leading character |. The type
+of a block is given by the word following
+the pipe character.  The remaining 
+words of the block header are viewed 
+as arguments to the block, which 
+we think of as a function.  See
+[Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
+for more details.
+
+### AST
+
+Here is the type of the AST for **M1**:
+
+```elm
+type Element
+    = Heading String
+    | Subheading String
+    | Paragraph (List String)
+```
+
+### Repl
+
+There is a repl for working with **M1**. To run 
+it, do this:
+
+```bash
+$ cd .M1/
+$ sh make.sh
+> h
+```
+
+The `h` command brings up a help screen.
+For subsequent runs, just do `node repl.js`
+
 
 
 ## R1
 
 The language 
-**R1** is the simplest, admitting constructs such as 
+**R1** is the simplest of the **R** series, admitting constructs such as 
 
 ```
     This is a test: [b [i whatever!]]
