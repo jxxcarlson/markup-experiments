@@ -20,6 +20,20 @@ For a version which includes rendering to LaTeX, see
 language **R2**. See [Rational Markup](https://github.com/jxxcarlson/rational-markup/blob/master/rationalMarkup.md)
 for an overview.
 
+Languages:
+
+- **M1** has very simple blocks, nothing more.  Blocks start with `|`
+- **R1** has simple inline elements like `[i ....]` for italic. 
+Can be nested, e.g `[i [b ...]]` for italicized bold text.
+- **R2** treats inline elements as functions which can be composed.
+Then one can say `[i.b ...]` for italicized bold text.
+- **R3** introduces two additional kinds of functions, hence
+the necessity of a rudimentary type system so that function 
+composition will work.  Here function composition is partially defined
+in that only functions of the same type can be composed. In this
+approach, it is necessary to introduce identity elements for 
+composition for each function type
+
 
 This is a work in progress.  
 
